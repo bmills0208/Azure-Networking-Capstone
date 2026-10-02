@@ -1,0 +1,9 @@
+*.pem
+*.key
+*.pfx
+*.cer
+*.secret
+*.secrets
+.env
+*.tfstate
+*.tfstate.*
