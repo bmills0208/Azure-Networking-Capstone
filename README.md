@@ -50,7 +50,40 @@ flowchart LR
     AppGW --> LAW
     LAW --> Alert
 ```
+## Project Evidence
 
+The following screenshots demonstrate availability testing, WAF enforcement, centralized logging, and automated alerting within the capstone environment.
+
+### Application Gateway Backend Health / Failover Test
+
+One IIS backend was intentionally taken offline. Azure Application Gateway detected the failed backend through its health probe while the second backend remained healthy and available to serve traffic.
+
+![Application Gateway backend health during failover](screenshots/02-backend-health-unhealthy.png)
+
+Despite one backend being unhealthy, the application remained available through the surviving IIS backend.
+
+
+![Website remains available during backend failure](screenshots/03-failover-site-still-up.png)
+
+### WAF Prevention Mode Blocking
+
+A harmless XSS-style request was sent through Azure Application Gateway while the WAF policy was operating in **Prevention** mode. The request was successfully blocked with an HTTP **403 Forbidden** response.
+
+![Azure Application Gateway WAF 403 block](screenshots/05-waf-403-block.png)
+
+### WAF Events in Log Analytics
+
+Application Gateway diagnostic logs were forwarded to Azure Log Analytics. KQL queries confirmed that the test requests were recorded as **Blocked** events and identified the corresponding WAF rule.
+
+![Blocked WAF events in Azure Log Analytics](screenshots/06-log-analytics-waf-blocks.png)
+
+### Azure Monitor Automated Alerting
+
+An Azure Monitor log alert was configured to trigger whenever one or more blocked WAF requests were detected. The alert successfully fired and delivered a notification through the configured Action Group.
+
+![Azure Monitor WAF blocked-request alert](screenshots/07-email-alert.jpg)
+
+> **Result:** The capstone validated backend health monitoring and failover, WAF enforcement, centralized security logging, KQL-based analysis, and automated Azure Monitor alerting end-to-end.
 ## Validation Performed
 
 - Verified both IIS backends were healthy.
@@ -73,9 +106,9 @@ This project intentionally included troubleshooting instead of only successful d
 
 See [`troubleshooting/lessons-learned.md`](troubleshooting/lessons-learned.md).
 
-## Screenshots
+## Additional Screenshots
 
-Place sanitized proof screenshots in the `screenshots/` folder. Two sanitized alert examples are included in this starter package.
+Additional sanitized deployment and validation screenshots are available in the [`screenshots`](screenshots/) directory.
 
 ## Security / Sanitization
 
